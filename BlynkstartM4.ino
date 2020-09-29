@@ -11,9 +11,9 @@
 #include <Adafruit_MCP9808.h>
 #include "TLC59108.h"
 
-char ssid[] = "MGBot"; // логин Wi-Fi
-char pass[] = "Terminator812"; // пароль Wi-Fi
-char auth[] = "m4Cpjx732z6ceujMr7iZUri9miGB3cu8"; // Ваш токен из почты
+char ssid[] = "LOGIN"; // логин Wi-Fi
+char pass[] = "PASSWORD"; // пароль Wi-Fi
+char auth[] = "TOKEN"; // Ваш токен из почты
 IPAddress blynk_ip(139, 59, 206, 133);
 BlynkTimer timer_update; // Таймер обновления данных
 

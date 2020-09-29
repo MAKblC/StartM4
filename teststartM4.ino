@@ -56,8 +56,8 @@ void setup()
   setBusChannel(0x03);
   pca9536.reset();
   pca9536.setMode(IO_OUTPUT);
-  pca9536.setState(IO1, IO_LOW);
-  pca9536.setState(IO0, IO_LOW);
+  pca9536.setState(IO1, IO_HIGH);
+  pca9536.setState(IO0, IO_HIGH);
 
   setBusChannel(0x06);
   Wire.setClock(10000L);
@@ -106,10 +106,10 @@ void loop()
   delay(2000);
   //запуск реле
   setBusChannel(0x03);
-  pca9536.setState(IO1, IO_HIGH);
+  pca9536.setState(IO1, IO_LOW);
   Serial.println("Watering");
   delay(2000);
-  pca9536.setState(IO1, IO_LOW);
+  pca9536.setState(IO1, IO_HIGH);
   Serial.println("pump off");
   delay(2000);
   // запуск светодиодов

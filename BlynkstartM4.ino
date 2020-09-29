@@ -76,8 +76,8 @@ void setup()
   setBusChannel(0x03);
   pca9536.reset();
   pca9536.setMode(IO_OUTPUT);
-  pca9536.setState(IO1, IO_LOW);
-  pca9536.setState(IO0, IO_LOW);
+  pca9536.setState(IO1, IO_HIGH);
+  pca9536.setState(IO0, IO_HIGH);
 
   setBusChannel(0x06);
   Wire.setClock(10000L);

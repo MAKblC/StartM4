@@ -62,7 +62,7 @@ void setup()
   Serial.println(WiFi.localIP());
   
  ////// запуск датчиков и исп. устройств //////
-  setBusChannel(0x05);
+  setBusChannel(0x04);
   mcp3221_5.setAlpha(DEFAULT_ALPHA);
   mcp3221_5.setNumSamples(DEFAULT_NUM_SAMPLES);
   mcp3221_5.setSmoothing(ROLLING_AVG);
@@ -104,7 +104,7 @@ void loop() // отслеживание работы таймера и Blynk
 }
 void readSendData() // обновление данных каждую секунду
 {
-  setBusChannel(0x05);
+  setBusChannel(0x04);
   tempsensor.wake(); // Считывание датчика температуры/влажности почвы
   float t1 = tempsensor.readTempC();
   float h1 = mcp3221_5.getData();

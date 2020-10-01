@@ -42,7 +42,7 @@ void setup()
   delay(512);
   Wire.begin();
 
-  setBusChannel(0x05);
+  setBusChannel(0x04);
   mcp3221_5.setAlpha(DEFAULT_ALPHA);
   mcp3221_5.setNumSamples(DEFAULT_NUM_SAMPLES);
   mcp3221_5.setSmoothing(ROLLING_AVG);
@@ -79,7 +79,7 @@ void setup()
 void loop()
 {
   // Считывание датчика температуры/влажности почвы
-  setBusChannel(0x05);
+  setBusChannel(0x04);
   tempsensor.wake();
   float t1 = tempsensor.readTempC();
   float h1 = mcp3221_5.getData();

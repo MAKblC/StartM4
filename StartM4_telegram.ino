@@ -226,7 +226,7 @@ void handleNewMessages(int numNewMessages)
       bot.sendMessage(chat_id, "Привет, " + from_name + "!", "");
       bot.sendMessage(chat_id, "Я контроллер Йотик 32. Команды смотрите в меню слева от строки ввода", "");
       String sms = "Команды:\n";
-      sms += "/options - пульт управления теплицей\n";
+      sms += "/options - пульт управления\n";
       sms += "/site - перейти на сайт\n";
       sms += "/photo - запостить фото\n";
       sms += "/help - вызвать помощь\n";

@@ -10,6 +10,7 @@
 #include <MCP3221.h>
 #include <Adafruit_MCP9808.h>
 #include "TLC59108.h"
+#include <PCA9634.h>
 
 #define BLYNK_TEMPLATE_ID "XXXXXXXX"
 #define BLYNK_DEVICE_NAME "XXXXXXXX"
@@ -21,10 +22,19 @@ char auth[] = BLYNK_AUTH_TOKEN;
 
 BlynkTimer timer_update; // Таймер обновления данных
 
+// Выберите модуль вашей сборки (ненужные занесите в комментарии)
+#define MGL_RGB1 1
+//#define MGL_RGB23 1 // MGL-RGB2 или MGL-RGB3
+
+#ifdef MGL_RGB1
 #define HW_RESET_PIN 0 // Только програмнный сброс
 #define I2C_ADDR TLC59108::I2C_ADDR::BASE
 TLC59108 leds(I2C_ADDR + 7); // Без перемычек добавляется 3 бита адреса
 // TLC59108 leds(I2C_ADDR + 0); // когда стоят 3 перемычки
+#endif
+#ifdef MGL_RGB23
+PCA9634 testModule(0x08); // (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
+#endif
 
 const byte DEV_ADDR_5 = 0x4D; // (0x4E) настройки датчика температуры и влажности почвы
 MCP3221 mcp3221_5(DEV_ADDR_5);
@@ -79,12 +89,21 @@ void setup()
   pca9536.setState(IO0, IO_HIGH);
 
   setBusChannel(0x06);
+#ifdef MGL_RGB1
   Wire.setClock(10000L);
   leds.init(HW_RESET_PIN);
   leds.setLedOutputMode(TLC59108::LED_MODE::PWM_IND);
   byte pwm = 0;
   leds.setAllBrightness(pwm);
-
+#endif
+#ifdef MGL_RGB23
+  testModule.begin();
+  for (int channel = 0; channel < testModule.channelCount(); channel++)
+  {
+    testModule.setLedDriverMode(channel, PCA9634_LEDOFF); // выключить все светодиоды в режиме 0/1
+  }
+#endif
+  
   bh1750.begin();
   bh1750.setMode(Continuously_High_Resolution_Mode);
 
@@ -138,33 +157,72 @@ BLYNK_WRITE(V5) { //запуск светодиодов
   int state = param.asInt();
   setBusChannel(0x06);
   if (state == 1) {
+#ifdef MGL_RGB1
     leds.setBrightness(6, 0x99);
     leds.setBrightness(0, 0x99);
     leds.setBrightness(1, 0x99);
     leds.setBrightness(4, 0x99);
+#endif
+#ifdef MGL_RGB23 
+    // номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+    testModule.setLedDriverMode(0, PCA9634_LEDON);
+    testModule.setLedDriverMode(6, PCA9634_LEDON); 
+    testModule.setLedDriverMode(4, PCA9634_LEDON);
+    testModule.setLedDriverMode(1, PCA9634_LEDON);
+#endif   
   }
   else {
+#ifdef MGL_RGB1
     leds.setBrightness(6, 0x00);
     leds.setBrightness(0, 0x00);
     leds.setBrightness(1, 0x00);
     leds.setBrightness(4, 0x00);
+#endif
+#ifdef MGL_RGB23 
+    // номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+    testModule.setLedDriverMode(0, PCA9634_LEDOFF);
+    testModule.setLedDriverMode(6, PCA9634_LEDOFF); 
+    testModule.setLedDriverMode(4, PCA9634_LEDOFF);
+    testModule.setLedDriverMode(1, PCA9634_LEDOFF);
+#endif 
   }
 }
 
 BLYNK_WRITE(V1) { //запуск RGB
   int r = param.asInt();
   setBusChannel(0x06);
+#ifdef MGL_RGB1
   leds.setBrightness(3, r);
+#endif
+#ifdef MGL_RGB23 
+// номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+  testModule.setLedDriverMode(channel, PCA9634_LEDPWM); // установка режима ШИМ  
+  testModule.write1(3, r);
+#endif  
 }
 BLYNK_WRITE(V8) { //запуск RGB
   int g = param.asInt();
   setBusChannel(0x06);
+#ifdef MGL_RGB1
   leds.setBrightness(2, g);
+#endif
+#ifdef MGL_RGB23
+// номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+  testModule.setLedDriverMode(channel, PCA9634_LEDPWM); // установка режима ШИМ  
+   testModule.write1(2, g);
+#endif
 }
 BLYNK_WRITE(V3) { //запуск RGB
   int b = param.asInt();
   setBusChannel(0x06);
+#ifdef MGL_RGB1
   leds.setBrightness(5, b);
+#endif
+#ifdef MGL_RGB23
+// номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+  testModule.setLedDriverMode(channel, PCA9634_LEDPWM); // установка режима ШИМ  
+  testModule.write1(5, b);
+#endif
 }
 
 bool setBusChannel(uint8_t i2c_channel) //функция смены I2C-порта

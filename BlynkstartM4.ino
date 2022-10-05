@@ -202,9 +202,9 @@ BLYNK_WRITE(V2) { //запуск RGB
 #ifdef MGL_RGB23  
   // номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
   testModule.setLedDriverMode(channel, PCA9634_LEDPWM); // установка режима ШИМ
-  testModule.write1(3, pwm);
-  testModule.write1(2, pwm);
-  testModule.write1(5, pwm);
+  testModule.write1(3, r);
+  testModule.write1(2, g);
+  testModule.write1(5, b);
 #endif 
 }
 

@@ -5,14 +5,24 @@
 #include <MCP3221.h>
 #include <Adafruit_MCP9808.h>
 #include "TLC59108.h"
+#include <PCA9634.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
 
+// Выберите модуль вашей сборки (ненужные занесите в комментарии)
+#define MGL_RGB1 1
+//#define MGL_RGB23 1 // MGL-RGB2 или MGL-RGB3
+
+#ifdef MGL_RGB1
 #define HW_RESET_PIN 0 // Только програмнный сброс
 #define I2C_ADDR TLC59108::I2C_ADDR::BASE
 TLC59108 leds(I2C_ADDR + 7); // Без перемычек добавляется 3 бита адреса
 // TLC59108 leds(I2C_ADDR + 0); // когда стоят 3 перемычки
+#endif
+#ifdef MGL_RGB23
+PCA9634 testModule(0x08); // (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
+#endif
 
 #define WIFI_SSID "XXXXXXXXXXX"
 #define WIFI_PASSWORD "XXXXXXXXX"
@@ -91,11 +101,20 @@ void setup()
   pca9536.setState(IO0, IO_HIGH);
 
   setBusChannel(0x06);
+ #ifdef MGL_RGB1
   Wire.setClock(10000L);
   leds.init(HW_RESET_PIN);
   leds.setLedOutputMode(TLC59108::LED_MODE::PWM_IND);
   byte pwm = 0;
   leds.setAllBrightness(pwm);
+#endif
+#ifdef MGL_RGB23
+  testModule.begin();
+  for (int channel = 0; channel < testModule.channelCount(); channel++)
+  {
+    testModule.setLedDriverMode(channel, PCA9634_LEDOFF); // выключить все светодиоды в режиме 0/1
+  }
+#endif
 
   bh1750.begin();
   bh1750.setMode(Continuously_High_Resolution_Mode);
@@ -189,26 +208,52 @@ void handleNewMessages(int numNewMessages)
     if ((text == "/light") || (text == "light"))
     {
       setBusChannel(0x06);
+#ifdef MGL_RGB1
       leds.setBrightness(6, 0x99);
       leds.setBrightness(0, 0x99);
+#endif   
+#ifdef MGL_RGB23 
+      // номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+      testModule.setLedDriverMode(0, PCA9634_LEDON);
+      testModule.setLedDriverMode(6, PCA9634_LEDON); 
+#endif 
       bot.sendMessage(chat_id, "Свет включен", "");
     }
     if ((text == "/off") || (text == "off"))
     {
       setBusChannel(0x06);
+#ifdef MGL_RGB1    
       leds.setBrightness(6, 0x00);
       leds.setBrightness(0, 0x00);
       leds.setBrightness(3, 0x00);
       leds.setBrightness(2, 0x00);
       leds.setBrightness(5, 0x00);
+#endif   
+#ifdef MGL_RGB23 
+      // номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+      testModule.setLedDriverMode(0, PCA9634_LEDOFF);
+      testModule.setLedDriverMode(6, PCA9634_LEDOFF); 
+      testModule.setLedDriverMode(3, PCA9634_LEDOFF);
+      testModule.setLedDriverMode(2, PCA9634_LEDOFF); 
+      testModule.setLedDriverMode(5, PCA9634_LEDOFF);
+#endif 
       bot.sendMessage(chat_id, "Свет выключен", "");
     }
     if ((text == "/color") || (text == "color"))
     {
       setBusChannel(0x06);
+#ifdef MGL_RGB1  
       leds.setBrightness(3, random(0, 255));
       leds.setBrightness(2, random(0, 255));
       leds.setBrightness(5, random(0, 255));
+#endif  
+#ifdef MGL_RGB23 
+      // номер канала может быть другим: см. https://github.com/MAKblC/Codes/tree/master/MGL-RGB3
+      testModule.setLedDriverMode(channel, PCA9634_LEDPWM); // установка режима ШИМ   
+      testModule.write1(3, random(0, 255));
+      testModule.write1(2, random(0, 255));
+      testModule.write1(5, random(0, 255));
+#endif 
       bot.sendMessage(chat_id, "Включен случайный цвет", "");
     }
     if (text == "/site") // отобразить кнопки в диалоге для перехода на сайт

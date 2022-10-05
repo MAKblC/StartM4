@@ -5,13 +5,23 @@
 #include <MCP3221.h>
 #include <Adafruit_MCP9808.h>
 #include "TLC59108.h"
+#include <PCA9634.h>
 
+// Выберите модуль вашей сборки (ненужные занесите в комментарии)
+#define MGL_RGB1 1
+//#define MGL_RGB23 1 // MGL-RGB2 или MGL-RGB3
+
+#ifdef MGL_RGB1
 #define HW_RESET_PIN 0 // Только програмнный сброс
 #define I2C_ADDR TLC59108::I2C_ADDR::BASE
 TLC59108 leds(I2C_ADDR + 7); // Без перемычек добавляется 3 бита адреса
 // TLC59108 leds(I2C_ADDR + 0); // когда стоят 3 перемычки
+#endif
+#ifdef MGL_RGB23
+PCA9634 testModule(0x08); // (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
+#endif
 
-const byte DEV_ADDR_5 = 0x4D; // (или 0x4E) - настройки датчика температуры и влажности почвы
+const byte DEV_ADDR_5 = 0x4E; // (или 0x4E) - настройки датчика температуры и влажности почвы
 MCP3221 mcp3221_5(DEV_ADDR_5);
 int a = 2312;
 int b = 1165;
@@ -60,11 +70,20 @@ void setup()
   pca9536.setState(IO0, IO_HIGH);
 
   setBusChannel(0x06);
+#ifdef MGL_RGB1
   Wire.setClock(10000L);
   leds.init(HW_RESET_PIN);
   leds.setLedOutputMode(TLC59108::LED_MODE::PWM_IND);
   byte pwm = 0;
   leds.setAllBrightness(pwm);
+#endif
+#ifdef MGL_RGB23
+  testModule.begin();
+  for (int channel = 0; channel < testModule.channelCount(); channel++)
+  {
+    testModule.setLedDriverMode(channel, PCA9634_LEDOFF); // выключить все светодиоды в режиме 0/1
+  }
+#endif
 
   bh1750.begin();
   bh1750.setMode(Continuously_High_Resolution_Mode);
@@ -114,6 +133,7 @@ void loop()
   delay(2000);
   // запуск светодиодов
   setBusChannel(0x06);
+#ifdef MGL_RGB1
   leds.setBrightness(6, 0xff);
   leds.setBrightness(0, 0xff);
   Serial.println("white");
@@ -138,6 +158,15 @@ void loop()
   Serial.println("blue");
   delay(2000);
   leds.setBrightness(5, 0x00);
+#endif
+#ifdef MGL_RGB23
+  for (int channel = 0; channel < testModule.channelCount(); channel++) {
+    testModule.setLedDriverMode(channel, PCA9634_LEDON);
+    delay(500);
+    testModule.setLedDriverMode(channel, PCA9634_LEDOFF);
+    delay(500);
+  }
+#endif
 }
 //функция смены I2C-порта
 bool setBusChannel(uint8_t i2c_channel)

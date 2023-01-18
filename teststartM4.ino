@@ -21,7 +21,7 @@ TLC59108 leds(I2C_ADDR + 7); // Без перемычек добавляется
 PCA9634 testModule(0x08); // (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
 #endif
 
-const byte DEV_ADDR_5 = 0x4E; // (или 0x4E) - настройки датчика температуры и влажности почвы
+const byte DEV_ADDR_5 = 0x4E; // (или 0x4D) - настройки датчика температуры и влажности почвы
 MCP3221 mcp3221_5(DEV_ADDR_5);
 int a = 2312;
 int b = 1165;

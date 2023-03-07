@@ -59,7 +59,6 @@ void setup()
   if (!tempsensor.begin(0x18))
   {
     Serial.println("Couldn't find MCP9808!");
-    while (1);
   }
   tempsensor.setResolution(3);
 

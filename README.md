@@ -17,7 +17,7 @@
 | Adafruit_BME280_Library.zip      | библиотека для MGS-THP80 |
 | Adafruit_MCP9808_Library-master.zip       | библиотека для MGS-THI50 |
 | Adafruit_Unified_Sensor.zip     | библиотека для MGS-THP80 |
-| BH1750FVI.zip    | библиотека для MGS-L75 |
+| BH1750-master.zip    | библиотека для MGS-L75 |
 |MCP3221_modified.zip  | библиотека для MGS-THI50 |
 | PCA9536_modified.zip  | библиотека для MGR-2EN |
 | TLC59108_modified.zip   |библиотека для MGL-RGB1|

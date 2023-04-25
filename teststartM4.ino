@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <BH1750FVI.h>
+#include <BH1750.h>
 #include <MCP3221.h>
 #include <Adafruit_MCP9808.h>
 #include "TLC59108.h"
@@ -27,7 +27,7 @@ int a = 2312;
 int b = 1165;
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
-BH1750FVI bh1750; // Датчик освещенности
+BH1750 lightMeter; // Датчик освещенности
 
 Adafruit_BME280 bme280; // Датчик температуры/влажности и атмосферного давления
 
@@ -84,8 +84,7 @@ void setup()
   }
 #endif
 
-  bh1750.begin();
-  bh1750.setMode(Continuously_High_Resolution_Mode);
+  lightMeter.begin();
 
   setBusChannel(0x07);
   bool bme_status = bme280.begin();
@@ -106,7 +105,7 @@ void loop()
   Serial.println("Hum1 " + String(h1, 1));
   delay(2000);
   //считывание датчика освещенности
-  float light = bh1750.getAmbientLight();
+  float light = lightMeter.readLightLevel();
   Serial.print("Light = ");
   Serial.println(String(light, 1) + " lx");
   delay(2000);

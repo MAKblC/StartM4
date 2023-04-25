@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <BH1750FVI.h>
+#include <BH1750.h>
 #include <MCP3221.h>
 #include <Adafruit_MCP9808.h>
 #include "TLC59108.h"
@@ -39,7 +39,7 @@ int a = 2312;
 int b = 1165;
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
-BH1750FVI bh1750; // Датчик освещенности
+BH1750 lightMeter; // Датчик освещенности
 
 Adafruit_BME280 bme280; // Датчик температуры/влажности и атмосферного давления
 
@@ -116,8 +116,7 @@ void setup()
   }
 #endif
 
-  bh1750.begin();
-  bh1750.setMode(Continuously_High_Resolution_Mode);
+  lightMeter.begin(); 
 
   setBusChannel(0x07);
   bool bme_status = bme280.begin();
@@ -176,7 +175,7 @@ void handleNewMessages(int numNewMessages)
       float t1 = tempsensor.readTempC();
       float h1 = mcp3221_5.getData();
       h1 = map(h1, a, b, 0, 100);
-      float light = bh1750.getAmbientLight();
+      float light = lightMeter.readLightLevel();
       setBusChannel(0x07);
       float t = bme280.readTemperature();
       float h = bme280.readHumidity();
@@ -185,7 +184,7 @@ void handleNewMessages(int numNewMessages)
       welcome += "Temp: " + String(t, 1) + " C\n";
       welcome += "Hum: " + String(h, 0) + " %\n";
       welcome += "Press: " + String(p, 0) + " hPa\n";
-      welcome += "Light: " + String(light, 0) + " Lx\n";
+      welcome += "Light: " + String(light) + " Lx\n";
       welcome += "Soil temp: " + String(t1, 0) + " C\n";
       welcome += "Soil hum: " + String(h1, 0) + " %\n";
       bot.sendMessage(chat_id, welcome, "Markdown");

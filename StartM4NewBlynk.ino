@@ -6,7 +6,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <BH1750FVI.h>
+#include <BH1750.h>
 #include <MCP3221.h>
 #include <Adafruit_MCP9808.h>
 #include "TLC59108.h"
@@ -42,7 +42,7 @@ int a = 2312;
 int b = 1165;
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
-BH1750FVI bh1750; // Датчик освещенности
+BH1750 lightMeter; // Датчик освещенности
 
 Adafruit_BME280 bme280; // Датчик температуры/влажности и атмосферного давления
 
@@ -104,8 +104,7 @@ void setup()
   }
 #endif
   
-  bh1750.begin();
-  bh1750.setMode(Continuously_High_Resolution_Mode);
+  lightMeter.begin(); 
 
   setBusChannel(0x07);
   bool bme_status = bme280.begin();
@@ -130,7 +129,7 @@ void readSendData() // обновление данных каждую секун
   Blynk.virtualWrite(V9, String(h1, 1)); delay(25); // отправка данных в проект
   Blynk.virtualWrite(V7, String(t1, 1)); delay(25); // отправка данных в проект
 
-  float light = bh1750.getAmbientLight(); //считывание датчика освещенности
+  float light = lightMeter.readLightLevel(); //считывание датчика освещенности
   Blynk.virtualWrite(V17, String(light, 1)); delay(25); // отправка данных в проект
 
   setBusChannel(0x07);

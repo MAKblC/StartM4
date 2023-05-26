@@ -181,12 +181,12 @@ void handleNewMessages(int numNewMessages)
       float h = bme280.readHumidity();
       float p = bme280.readPressure() / 100.0F;
       String welcome = "Показания датчиков:\n";
-      welcome += "Temp: " + String(t, 1) + " C\n";
-      welcome += "Hum: " + String(h, 0) + " %\n";
-      welcome += "Press: " + String(p, 0) + " hPa\n";
-      welcome += "Light: " + String(light) + " Lx\n";
-      welcome += "Soil temp: " + String(t1, 0) + " C\n";
-      welcome += "Soil hum: " + String(h1, 0) + " %\n";
+      welcome += "🌡 Температура воздуха: " + String(t, 1) + " °C\n";
+      welcome += "💧 Влажность воздуха: " + String(h, 0) + " %\n";
+      welcome += "☁ Атмосферное давление: " + String(p, 0) + " гПа\n";
+      welcome += "☀ Освещенность: " + String(light) + " Лк\n";
+      welcome += "🌱 Температура почвы: " + String(t1, 0) + " °C\n";
+      welcome += "🌱 Влажность почвы: " + String(h1, 0) + " %\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
     if ((text == "/pumpon") || (text == "pumpon"))

@@ -2,7 +2,7 @@
 
 Набор "Стартовый ЙоТик М4" позволяет изучать технологии интернета вещей (IoT)  по теме «Умное сельское хозяйство» с интересом и легкостью!
 
-![greenhouse](https://mgbot.ru/upload/iblock/585/5853989f7bef9d0d780a2c49c4dff503.jpg)
+![start4](https://mgbot.ru/upload/iblock/bb1/jz0qr11pthtsxy25c3jfhs0rqcog7miq.jpg)
 
 [Ссылка на сайте производителя](https://mgbot.ru/catalog/obrazovatelnye_nabory_iot/nabor_startovyy_yotik_m4/)
 

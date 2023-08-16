@@ -1,3 +1,7 @@
+/*
+Не забудьте поправить настройки и адреса устройств в зависимости от комплектации!  
+*/
+
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
@@ -14,14 +18,15 @@
 #ifdef MGL_RGB1
 #define HW_RESET_PIN 0 // Только програмнный сброс
 #define I2C_ADDR TLC59108::I2C_ADDR::BASE
-TLC59108 leds(I2C_ADDR + 7); // Без перемычек добавляется 3 бита адреса
+TLC59108 leds(I2C_ADDR + 0); // Без перемычек добавляется 3 бита адреса
 // TLC59108 leds(I2C_ADDR + 0); // когда стоят 3 перемычки
 #endif
 #ifdef MGL_RGB23
-PCA9634 testModule(0x08); // (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
+PCA9634 testModule(0x1C); // (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
 #endif
 
-const byte DEV_ADDR_5 = 0x4E; // (или 0x4D, 0x49) - настройки датчика температуры и влажности почвы
+// MGS-THI50
+const byte DEV_ADDR_5 = 0x4E; // (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
 MCP3221 mcp3221_5(DEV_ADDR_5);
 int a = 2312;
 int b = 1165;

@@ -1,3 +1,7 @@
+/*
+Не забудьте поправить настройки и адреса устройств в зависимости от комплектации!  
+*/
+
 #define BLYNK_PRINT Serial
 #include <WiFi.h>
 #include <WiFiClient.h>

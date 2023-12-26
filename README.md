@@ -18,6 +18,7 @@
 | Adafruit_MCP9808_Library-master.zip       | библиотека для MGS-THI50 |
 | Adafruit_Unified_Sensor.zip     | библиотека для MGS-THP80 |
 | BH1750-master.zip    | библиотека для MGS-L75 |
+| GyverPortal.zip   | библиотека для локального сервера|
 |MCP3221_modified.zip  | библиотека для MGS-THI50 |
 | PCA9536_modified.zip  | библиотека для MGR-2EN |
 | TLC59108_modified.zip   |библиотека для MGL-RGB1|

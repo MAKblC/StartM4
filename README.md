@@ -22,6 +22,7 @@
 | PCA9536_modified.zip  | библиотека для MGR-2EN |
 | TLC59108_modified.zip   |библиотека для MGL-RGB1|
 | PCA9634-0.2.1.zip   |библиотека для MGL-RGB2/3|
+| startM4Demo.ino  | скетч для локального сервера|
 | StartM4NewBlynk.ino  | скетч для Blynk новой версии|
 | StartM4_telegram.ino  | скетч для Telegram|
 | teststartM4.ino  | скетч для тестирования устройств|
